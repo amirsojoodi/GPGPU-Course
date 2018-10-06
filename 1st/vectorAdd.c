@@ -21,12 +21,15 @@ int main(int argc, char *argv[]){
 
 	int *a, *b, *c;
 	struct timeval start, end;
+	time_t t;
 
 	int size = atoi(argv[1]);
 
 	a = (int *)malloc(sizeof(int) * size);
 	b = (int *)malloc(sizeof(int) * size);
 	c = (int *)malloc(sizeof(int) * size);
+
+	srand((unsigned) time(&t));
 
 	for(int i=0; i < size; i++){
 		a[i] = rand() % 100;
