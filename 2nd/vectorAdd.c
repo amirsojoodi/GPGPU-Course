@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<sys/time.h>
 #include<time.h>
+#define SIZE 10000000
 
 void sequential_naive_vectorAdd(int *a, int *b, int *c, int size){
 	for(int i = 0; i < size; i++){
@@ -10,9 +11,14 @@ void sequential_naive_vectorAdd(int *a, int *b, int *c, int size){
 }
 
 void sequential_vectorAdd_first_optimization(int *a, int *b, int *c, int size){
-	for(int i = 0; i < size / 2; i++){
+	//for(int i = 0; i < size / 2; i++){
+	//	c[i] = a[i] + b[i];
+	//	c[size - i - 1] = a[size - i - 1] + b[size - i - 1];
+	//}
+	for(int i = 0; i < SIZE/ 2;){
 		c[i] = a[i] + b[i];
-		c[size - i - 1] = a[size - i - 1] + b[size - i - 1];
+		i++;
+		c[SIZE - i] = a[SIZE - i] + b[SIZE - i];
 	}
 }
 
