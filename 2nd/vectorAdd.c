@@ -2,7 +2,6 @@
 #include<stdlib.h>
 #include<sys/time.h>
 #include<time.h>
-#define SIZE 10000000
 
 void sequential_naive_vectorAdd(int *a, int *b, int *c, int size){
 	for(int i = 0; i < size; i++){
@@ -15,10 +14,10 @@ void sequential_vectorAdd_first_optimization(int *a, int *b, int *c, int size){
 	//	c[i] = a[i] + b[i];
 	//	c[size - i - 1] = a[size - i - 1] + b[size - i - 1];
 	//}
-	for(int i = 0; i < SIZE/ 2;){
+	for(int i = 0; i < size / 2;){
 		c[i] = a[i] + b[i];
 		i++;
-		c[SIZE - i] = a[SIZE - i] + b[SIZE - i];
+		c[size - i] = a[size - i] + b[size - i];
 	}
 }
 
@@ -62,12 +61,14 @@ int main(int argc, char *argv[]){
 
 	int *a, *b, *c;
 	struct timeval start, end;
-
+	time_t t;
 	int size = atoi(argv[1]);
 
 	a = (int *)malloc(sizeof(int) * size);
 	b = (int *)malloc(sizeof(int) * size);
 	c = (int *)malloc(sizeof(int) * size);
+
+	srand((unsigned) time(&t));
 
 	for(int i=0; i < size; i++){
 		a[i] = rand() % 100;
