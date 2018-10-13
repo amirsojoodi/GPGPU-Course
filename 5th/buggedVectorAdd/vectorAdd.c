@@ -14,10 +14,11 @@ void *parallel_vector_add(void *arg){
 	pthread_exit(NULL);
 }
 
-void sequential_naive_vectorAdd(int *a, int *b, int *c, int size){
+int *sequential_naive_vectorAdd(int *a, int *b, int size){
     for(int i = 0; i < size; i++){
-		c[i] = a[i] + b[i];
+		a[i] = a[i] + b[i];
     }
+	return a;
 }
 
 
@@ -50,13 +51,11 @@ int main(int argc, char *argv[]){
 	for(int i = 0; i <size; i++){
 		a[i] = rand() % 100;
 		b[i] = rand() % 100;
-		c[i] = 0;
-		d[i] = 0;
 	}
 
 	gettimeofday(&start, NULL);
 
-    sequential_naive_vectorAdd(a, b, c, size);
+    c = sequential_naive_vectorAdd(a, b, size);
 
     gettimeofday(&end, NULL);
 
@@ -95,7 +94,6 @@ int main(int argc, char *argv[]){
 
 	free(a);
 	free(b);
-	free(c);
 	free(d);
 
 	return 0;
