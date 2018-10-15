@@ -15,7 +15,7 @@ int sequential_naive_vectorReduce(int *a, int size){
 int main(int argc, char *argv[]){
 
 	struct timeval start, end;
-	int *a, *c, *d;
+	int *a, *d;
 	pthread_t *threads;
 	argument *arguments;
 	int result_serial;
@@ -31,7 +31,6 @@ int main(int argc, char *argv[]){
 	int num_thread = atoi(argv[2]);
 	
 	a = (int *)malloc(sizeof(int) * size);
-	c = (int *)malloc(sizeof(int) * num_thread);
 	threads = (pthread_t *)malloc(sizeof(pthread_t) * num_thread);
 	arguments = (argument *)malloc(sizeof(argument) * num_thread);
 
