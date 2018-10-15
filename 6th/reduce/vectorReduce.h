@@ -7,11 +7,7 @@
 #define MIN(a,b) ((a) < (b) ? a : b)
 
 typedef struct argument{
-	int *a;
-	int *c;
-	int tid;
-	int size;
-	int num_thread;
+	// You should complete here
 } argument;
 
 int validate(int *a, int *b, int length) {

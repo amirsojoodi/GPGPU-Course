@@ -1,28 +1,14 @@
 #include"vectorReduce.h"
 
+int result_parallel;
+
 void *parallel_vector_reduce(void *arg){
-	argument targ = *(argument *)arg;
-
-	int *a = targ.a;
-
-	int si = (targ.size / targ.num_thread) * targ.tid; 
-	int ei = MIN(si + targ.size / targ.num_thread, targ.size);
-
-	int sum = 0;
-	for(int i = si; i < ei; i++){
-		sum += a[i];
-	}
-	targ.c[targ.tid] = sum;
-
+	//You should complete here.
 	pthread_exit(NULL);
 }
 
 int sequential_naive_vectorReduce(int *a, int size){
-	int sum = 0;
-    for(int i = 0; i < size; i++){
-		sum += a[i];
-    }
-	return sum;
+	//You should complete here.
 }
 
 
@@ -32,7 +18,7 @@ int main(int argc, char *argv[]){
 	int *a, *c, *d;
 	pthread_t *threads;
 	argument *arguments;
-	int result_serial, result_parallel;
+	int result_serial;
 	time_t t;
 
 	if(argc != 3){
@@ -71,19 +57,12 @@ int main(int argc, char *argv[]){
     gettimeofday(&start, NULL);
 
 	for(int i = 0; i < num_thread; i++){
-		arguments[i].a = a;
-		arguments[i].c = c;
-		arguments[i].tid = i;
-		arguments[i].size = size;
-		arguments[i].num_thread = num_thread;
-	
-		pthread_create(&threads[i], 0, parallel_vector_reduce, (void *)&arguments[i]);
+		// You should complete here.	
 	}
 	
 	int status;
     for (int i = 0; i < num_thread; ++i) {
         pthread_join(threads[i], (void *)&status);
-		result_parallel += c[i];
     }
 
 	gettimeofday(&end, NULL);
