@@ -8,6 +8,11 @@
 
 typedef struct argument{
 	// You should complete here
+	int *a;
+	int id;
+	int size;
+	int my_result;
+	int num_thread;
 } argument;
 
 int validate(int *a, int *b, int length) {
