@@ -1,35 +1,26 @@
 Flat profile:
 
 Each sample counts as 0.01 seconds.
+ no time accumulated
+
   %   cumulative   self              self     total           
- time   seconds   seconds    calls  ms/call  ms/call  name    
- 50.13      0.19     0.19                             naive_parallel_vector_add
- 23.75      0.28     0.09        1    90.24    90.24  sequential_naive_vectorAdd
- 21.11      0.36     0.08                             main
-  5.28      0.38     0.02        1    20.05    20.05  validate
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+  0.00      0.00     0.00        1     0.00     0.00  sequential_naive_vectorAdd
+  0.00      0.00     0.00        1     0.00     0.00  validate
 
 			Call graph
 
 
-granularity: each sample hit covers 2 byte(s) for 2.62% of 0.38 seconds
+granularity: each sample hit covers 2 byte(s) no time propagated
 
 index % time    self  children    called     name
-                                                 <spontaneous>
-[1]     50.0    0.08    0.11                 main [1]
-                0.09    0.00       1/1           sequential_naive_vectorAdd [3]
-                0.02    0.00       1/1           validate [4]
+                0.00    0.00       1/1           main [8]
+[1]      0.0    0.00    0.00       1         sequential_naive_vectorAdd [1]
 -----------------------------------------------
-                                                 <spontaneous>
-[2]     50.0    0.19    0.00                 naive_parallel_vector_add [2]
------------------------------------------------
-                0.09    0.00       1/1           main [1]
-[3]     23.7    0.09    0.00       1         sequential_naive_vectorAdd [3]
------------------------------------------------
-                0.02    0.00       1/1           main [1]
-[4]      5.3    0.02    0.00       1         validate [4]
+                0.00    0.00       1/1           main [8]
+[2]      0.0    0.00    0.00       1         validate [2]
 -----------------------------------------------
 
 Index by function name
 
-   [1] main                    [3] sequential_naive_vectorAdd
-   [2] naive_parallel_vector_add [4] validate
+   [1] sequential_naive_vectorAdd [2] validate
