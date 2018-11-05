@@ -14,25 +14,11 @@ void decrypt();
 
 int main()
 {
-	printf("\nENTER FIRST PRIME NUMBER\n");
-	scanf("%d", &x);
-	flag = prime(x);
-	if(flag == 0)
-	{
-		printf("\nINVALID INPUT\n");
-		exit(0);
-	}
-	printf("\nENTER SECOND PRIME NUMBER\n");
-	scanf("%d", &y);
-	flag = prime(y);
-	if(flag == 0 || x == y)
-	{
-		printf("\nINVALID INPUT\n");
-		exit(0);
-	}
+	x = 19; //first prime number
+	y = 11; //second prime number
 	printf("\nENTER MESSAGE OR STRING TO ENCRYPT\n");
 
-	scanf("%s",msg);
+	scanf("%[^\n]s",msg);
 	for(i = 0; msg[i] != 0; i++)
 		m[i] = msg[i];
 	n = x * y;
