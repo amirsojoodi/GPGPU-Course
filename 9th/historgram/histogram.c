@@ -7,7 +7,7 @@ pthread_mutex_t *locks;
 
 int main(int argc, char *argv[]){
 
-	struct timeval start, end;
+	double elapsed_time;
 	int *data, *serial_hist, *parallel_hist;
 	pthread_t *threads;
 	argument *arguments;
@@ -31,27 +31,22 @@ int main(int argc, char *argv[]){
 	initialize_locks(&locks, hist_size);
 
 	// Sequential histogram
-	gettimeofday(&start, NULL);
+	set_clock();
 
     sequential_naive_histogram(data, serial_hist, data_size, hist_size);
 
-    gettimeofday(&end, NULL);
+    elapsed_time = get_elapsed_time();
 
-    double diff = (end.tv_sec - start.tv_sec) * 1000000.0 +
-        (end.tv_usec - start.tv_usec);
+	printf("Naive Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
 
-    printf("Naive Histogram time calculation duration: %.4fms\n", diff / 1000);
+	// First Parallel histogram 
+	set_clock();
 
-	// First Parallel histogram
-    gettimeofday(&start, NULL);
-    
 	first_parallel_histogram(data, parallel_hist, threads, arguments, data_size, hist_size, num_thread);
 
-	gettimeofday(&end, NULL);
+    elapsed_time = get_elapsed_time();
 
-    diff = (end.tv_sec - start.tv_sec) * 1000000.0
-            + (end.tv_usec - start.tv_usec);
-    printf("-> 1st Parallel Histogram time calculation duration: %.4fms\n", diff / 1000);
+    printf("-> 1st Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
 
     #ifdef  TEST
     validate(serial_hist, parallel_hist, hist_size);
@@ -60,15 +55,13 @@ int main(int argc, char *argv[]){
 	// Second Parallel histogram
 	memset(parallel_hist, 0, hist_size * sizeof(int));
 
-    gettimeofday(&start, NULL);
+	set_clock();
     
 	second_parallel_histogram(data, parallel_hist, threads, arguments, data_size, hist_size, num_thread);
 
-	gettimeofday(&end, NULL);
+    elapsed_time = get_elapsed_time();
 
-    diff = (end.tv_sec - start.tv_sec) * 1000000.0
-            + (end.tv_usec - start.tv_usec);
-    printf("-> 2nd Parallel Histogram time calculation duration: %.4fms\n", diff / 1000);
+    printf("-> 2nd Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
 
     #ifdef  TEST
     validate(serial_hist, parallel_hist, hist_size);
@@ -77,15 +70,13 @@ int main(int argc, char *argv[]){
 	// Third Parallel histogram
 	memset(parallel_hist, 0, hist_size * sizeof(int));
 
-    gettimeofday(&start, NULL);
+	set_clock();
     
 	third_parallel_histogram(data, parallel_hist, threads, arguments, data_size, hist_size, num_thread);
 
-	gettimeofday(&end, NULL);
+    elapsed_time = get_elapsed_time();
 
-    diff = (end.tv_sec - start.tv_sec) * 1000000.0
-            + (end.tv_usec - start.tv_usec);
-    printf("-> 3rd Parallel Histogram time calculation duration: %.4fms\n", diff / 1000);
+    printf("-> 3rd Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
 
     #ifdef  TEST
     validate(serial_hist, parallel_hist, hist_size);

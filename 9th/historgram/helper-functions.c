@@ -3,6 +3,19 @@
 #include"histogram.h"
 #endif
 
+struct timeval start, end;
+
+void set_clock(){
+	gettimeofday(&start, NULL);
+}
+
+double get_elapsed_time(){
+	gettimeofday(&end, NULL);
+	double elapsed = (end.tv_sec - start.tv_sec) * 1000000.0;
+	elapsed += end.tv_usec - start.tv_usec;
+	return elapsed;
+}
+
 void validate(int *a, int *b, int length) {
 	for (int i = 0; i < length; ++i) {
 		if (a[i] != b[i]) {

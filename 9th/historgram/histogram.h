@@ -21,7 +21,11 @@ typedef struct argument{
 	int num_thread;
 } argument;
 
-int *sequential_naive_histogram(int*, int*, int, int);
+void set_clock();
+
+double get_elapsed_time();
+
+void sequential_naive_histogram(int*, int*, int, int);
 
 void first_parallel_histogram(int*, int*, pthread_t*, argument*, int, int, int);
 

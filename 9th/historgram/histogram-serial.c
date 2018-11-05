@@ -3,7 +3,7 @@
 #include"histogram.h"
 #endif
 
-int *sequential_naive_histogram(int *a, int *serial_hist, int size, int hist_size){
+void sequential_naive_histogram(int *a, int *serial_hist, int size, int hist_size){
 
 	int bucketSize = RANGE / hist_size;
 
