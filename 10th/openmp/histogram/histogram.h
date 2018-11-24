@@ -4,6 +4,7 @@
 #include<pthread.h>
 #include<time.h>
 #include<sys/time.h>
+#include<omp.h>
 
 #define MIN(a,b) ((a) < (b) ? a : b)
 
@@ -27,11 +28,9 @@ double get_elapsed_time();
 
 void sequential_naive_histogram(int*, int*, int, int);
 
-void first_parallel_histogram(int*, int*, pthread_t*, argument*, int, int, int);
-
-void second_parallel_histogram(int*, int*, pthread_t*, argument*, int, int, int);
-
 void third_parallel_histogram(int*, int*, pthread_t*, argument*, int, int, int);
+
+void openmp_histogram(int*, int*, int, int, int);
 
 void validate(int *a, int *b, int length);
 

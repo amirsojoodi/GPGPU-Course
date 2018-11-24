@@ -39,34 +39,6 @@ int main(int argc, char *argv[]){
 
 	printf("Naive Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
 
-	// First Parallel histogram 
-	set_clock();
-
-	first_parallel_histogram(data, parallel_hist, threads, arguments, data_size, hist_size, num_thread);
-
-    elapsed_time = get_elapsed_time();
-
-    printf("-> 1st Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
-
-    #ifdef  TEST
-    validate(serial_hist, parallel_hist, hist_size);
-    #endif
-	
-	// Second Parallel histogram
-	memset(parallel_hist, 0, hist_size * sizeof(int));
-
-	set_clock();
-    
-	second_parallel_histogram(data, parallel_hist, threads, arguments, data_size, hist_size, num_thread);
-
-    elapsed_time = get_elapsed_time();
-
-    printf("-> 2nd Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
-
-    #ifdef  TEST
-    validate(serial_hist, parallel_hist, hist_size);
-    #endif
-
 	// Third Parallel histogram
 	memset(parallel_hist, 0, hist_size * sizeof(int));
 
@@ -77,6 +49,21 @@ int main(int argc, char *argv[]){
     elapsed_time = get_elapsed_time();
 
     printf("-> 3rd Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
+
+    #ifdef  TEST
+    validate(serial_hist, parallel_hist, hist_size);
+    #endif
+
+	// Openmp parallel histogram
+	memset(parallel_hist, 0, hist_size * sizeof(int));
+
+	set_clock();
+    
+	openmp_histogram(data, parallel_hist, data_size, hist_size, num_thread);
+
+    elapsed_time = get_elapsed_time();
+
+    printf("-> Openmp Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
 
     #ifdef  TEST
     validate(serial_hist, parallel_hist, hist_size);
