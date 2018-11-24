@@ -20,7 +20,7 @@ void validate(double *a, double *b, int length) {
 	for (int i = 0; i < length; ++i) {
 		if (a[i] != b[i]) {
 			printf("Different value detected at position: %d,"
-					" expected %f but get %f\n", i, a[i], b[i]);
+					" expected %.15f but get %.15f\n", i, a[i], b[i]);
 			return;
 		}
 	}
