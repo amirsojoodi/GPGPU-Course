@@ -46,6 +46,31 @@ int main(int argc, char *argv[]){
 	
 	// COMPLETE HERE
 	omp_set_num_threads(num_thread);
+
+	// Sequential histogram
+	set_clock();
+	int count_inside_shared = 0;
+	#pragma omp parallel 
+	{
+		double x = 0, y = 0;
+		double sum = 0;
+		int count_inside = 0;
+		int seed = 23 * omp_get_thread_num();
+		#pragma omp for
+		for(int i = 0; i < num_steps; i++){
+			x = (double)rand_r(&seed)/RAND_MAX;
+			y = (double)rand_r(&seed)/RAND_MAX;
+			sum = x * x + y * y;
+			if (sum <= 1){
+				count_inside++;
+			}
+		}
+
+		#pragma omp atomic
+		count_inside_shared += count_inside;
+	}
+
+	parallelPI = (count_inside_shared * 4.0) / num_steps;
 	
     elapsed_time = get_elapsed_time();
 
