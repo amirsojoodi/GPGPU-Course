@@ -6,7 +6,7 @@
 int main(int argc, char *argv[]){
 
 	double elapsed_time;
-	double serialPI, parallelPI, step;
+	double serialPI = 0, parallelPI = 0;
 	
 	if(argc != 3){
 		printf("Correct way to execute this program is:\n");
@@ -17,21 +17,25 @@ int main(int argc, char *argv[]){
 	int num_steps = atoi(argv[1]);
 	int num_thread = atoi(argv[2]);
 	
-	serialPI = 0;
-	parallelPI = 0;
-
 	// Sequential histogram
 	set_clock();
 
 	// COMPLETE HERE
-	step = 1.0 / num_steps;
-	double x = 0;
+	time_t t;
+	srand((unsigned) time(&t));
+
+	double x = 0, y = 0;
 	double sum = 0;
+	int count_inside = 0;
 	for(int i = 0; i < num_steps; i++){
-		x = (i + 0.5) * step;
-		sum += 4.0/(1.0 + x*x);
+		x = (double)rand()/RAND_MAX;
+		y = (double)rand()/RAND_MAX;
+		sum = x * x + y * y;
+		if (sum <= 1){
+			count_inside++;
+		}
 	}
-	serialPI = sum * step;
+	serialPI = (count_inside * 4.0) / num_steps;
 
     elapsed_time = get_elapsed_time();
 
@@ -41,22 +45,8 @@ int main(int argc, char *argv[]){
 	set_clock();
 	
 	// COMPLETE HERE
-	// omp_set_num_threads(num_thread);
+	omp_set_num_threads(num_thread);
 	
-	#pragma omp parallel num_threads(num_thread)
-	{
-		double private_sum = 0.0;
-		double x = 0;
-		#pragma omp for 
-		for(int i = 0; i < num_steps; i++){
-			x = (i + 0.5) * step;
-			private_sum += 4.0/(1.0 + x*x);
-		}
-		#pragma omp atomic
-		parallelPI += private_sum;
-	}
-	parallelPI *= step;
-
     elapsed_time = get_elapsed_time();
 
     printf("-> Openmp PI calculation time: %.4fms\n", elapsed_time / 1000);
