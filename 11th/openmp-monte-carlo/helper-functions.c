@@ -1,5 +1,5 @@
-#ifndef _HISTOGRAM_H
-#define _HISTOGRAM_H
+#ifndef _MONTECARLO_H
+#define _MONTECARLO_H
 #include"pi.h"
 #endif
 

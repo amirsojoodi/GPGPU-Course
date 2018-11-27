@@ -1,4 +1,4 @@
-options = -D TEST -std=c99 -Wall -fopenmp
+options = -D TEST -std=gnu99 -Wall -fopenmp
 sources = pi.c pi.h helper-functions.c
 
 all: pi pi_optimized
