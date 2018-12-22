@@ -1,3 +1,6 @@
+#ifndef _VECTOROP_H
+#define _VECTOROP_H
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -61,3 +64,4 @@ void initialize_data_zero(int **data, int data_size){
 }   
 
 
+#endif

@@ -1,7 +1,4 @@
-#ifndef _VECTOROP_H
-#define _VECTOROP_H
 #include"vectorOp.h"
-#endif
 
 __global__ void vector_operation_kernel(int *output, int *data, int size){
 
