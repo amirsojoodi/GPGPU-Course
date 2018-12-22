@@ -2,13 +2,17 @@
 
 __global__ void vector_operation_kernel(int *output, int *data, int size){
 	
-	// TODO
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (tid < size){
+		output[tid] = OPERATION_I(data[tid]);
+	}
 }
 
 void sequential_vector_operation(int *output, int *data, int size){
 
 	for(int i = 0; i < size; i++){
-		output[i] = OPERATION(data[i]);
+		output[i] = OPERATION_I(data[i]);
 	}
 	return;
 }
@@ -51,7 +55,7 @@ int main(int argc, char *argv[]){
 	// CUDA Parallel vector operation
 	
 	// TODO: compute grid_size
-	grid_size = 0;
+	grid_size = (data_size - 1) / block_size + 1;
 	dim3 grid_dime(grid_size, 1, 1);
 	dim3 block_dime(block_size, 1, 1);
 
