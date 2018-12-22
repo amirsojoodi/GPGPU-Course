@@ -1,10 +1,8 @@
 #include"vectorOp.h"
 
 __global__ void vector_operation_kernel(int *output, int *data, int size){
-
-	int tid = blockIdx.x * blockDim.x + threadIdx.x;
-
-	output[tid] = OPERATION(data[tid]);
+	
+	// TODO
 }
 
 void sequential_vector_operation(int *output, int *data, int size){
@@ -51,7 +49,9 @@ int main(int argc, char *argv[]){
 	printf("-> Naive vector operation time: %.4fms\n", elapsed_time / 1000);
 
 	// CUDA Parallel vector operation
-	grid_size = (data_size - 1) / block_size + 1;
+	
+	// TODO: compute grid_size
+	grid_size = 0;
 	dim3 grid_dime(grid_size, 1, 1);
 	dim3 block_dime(block_size, 1, 1);
 

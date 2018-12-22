@@ -10,7 +10,9 @@
 #include<math_functions.h>
 #include<math.h>
 
-#define OPERATION(X) (X)*13+(X)/13+(X)*(X)*((X)/19)+(X)*((X)-13)
+#define OPERATION(X) (sinf(X))/1319+(cosf(X))/1317+(cosf(X+13))*(sinf(X-13))
+
+#define OPERATION_I(X) (X)/1319+(X)*((X)-13)
 
 #define RANDOM_NUMBER_MAX 1000
 
