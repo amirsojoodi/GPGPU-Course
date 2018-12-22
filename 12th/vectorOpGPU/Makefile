@@ -1,17 +1,13 @@
-gcc-options = -D TEST -std=gnu99 -Wall 
-nvcc-opetions = -Wall -D TEST -Wextra
-sources = vectorOp.cu vectorOp.h helper-functions.o
+nvcc_options= -gencode arch=compute_30,code=sm_30 -lm -D TEST --compiler-options -Wall 
+sources = vectorOp.cu
 
 all: vectorOp vectorOp_optimized
 
 vectorOp: $(sources) Makefile
-	nvcc $(sources) -o vectorOp $(nvcc-options)
+	nvcc -o vectorOp $(sources) $(nvcc_options)
 
 vectorOp_optimized: $(sources) Makefile
-	nvcc $(sources) -o vectorOp_optimized $(nvcc-options) -O3
-
-helper_function.o: helper_function.c vectorOp.h Makefile
-	gcc -c helper_function.c $(gcc-options)
+	nvcc -o vectorOp_optimized $(sources) $(nvcc_options) -O3
 
 clean:
 	rm vectorOp vectorOp_optimized

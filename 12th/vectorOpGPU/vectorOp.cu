@@ -3,9 +3,9 @@
 #include"vectorOp.h"
 #endif
 
-__global__ vector_operation_kernel(int *output, int *data){
+__global__ void vector_operation_kernel(int *output, int *data, int size){
 
-	int tid = blockIdx.x * blockDim.x + threadIdx.x 
+	int tid = blockIdx.x * blockDim.x + threadIdx.x;
 
 	output[tid] = OPERATION(data[tid]);
 }
@@ -23,8 +23,8 @@ int main(int argc, char *argv[]){
 	double elapsed_time;
 	int block_size, grid_size;
 	int data_size;
-	int *data_h; *output_h; *device_output_h;
-	int *data_d; *output_d;
+	int *data_h, *output_h, *device_output_h;
+	int *data_d, *output_d;
 	// int work_per_thread;
 	
 	if(argc != 3){
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
 	printf("-> Naive vector operation time: %.4fms\n", elapsed_time / 1000);
 
 	// CUDA Parallel vector operation
-	grid_size = (input_length - 1) / block_size + 1;
+	grid_size = (data_size - 1) / block_size + 1;
 	dim3 grid_dime(grid_size, 1, 1);
 	dim3 block_dime(block_size, 1, 1);
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[]){
 	CUDA_CHECK_RETURN(cudaGetLastError());
 	
 	//Copy back the result
-	CUDA_CHECK_RETURN(cudaMemcpy(device_ouput_h, output_d, sizeof(int)*data_size, cudaMemcpyDeviceToHost));
+	CUDA_CHECK_RETURN(cudaMemcpy(device_output_h, output_d, sizeof(int)*data_size, cudaMemcpyDeviceToHost));
 
     elapsed_time = get_elapsed_time();
 
