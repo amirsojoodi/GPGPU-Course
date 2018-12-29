@@ -1,5 +1,17 @@
 #include"vectorOp.h"
 
+__global__ void vector_operation_kernel_coalesced(int *output, int *data, int size){
+	
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+
+	int total = blockDim.x * gridDim.x;
+
+	for(;tid < size; tid += total){
+		output[tid] = OPERATION(data[tid]);
+	}
+
+}
+
 __global__ void vector_operation_kernel(int *output, int *data, int size, int work_per_thread){
 	
 	int tid = threadIdx.x + blockIdx.x * blockDim.x;
@@ -69,7 +81,8 @@ int main(int argc, char *argv[]){
 
 	CUDA_CHECK_RETURN(cudaMemcpy(data_d, data_h, sizeof(int)*data_size, cudaMemcpyHostToDevice));
 
-	vector_operation_kernel<<< grid_dime, block_dime >>>(output_d, data_d, data_size, work_per_thread);
+	//vector_operation_kernel<<< grid_dime, block_dime >>>(output_d, data_d, data_size, work_per_thread);
+	vector_operation_kernel_coalesced<<< grid_dime, block_dime >>>(output_d, data_d, data_size);
 	
 	CUDA_CHECK_RETURN(cudaDeviceSynchronize()); // Wait for the GPU launched work to complete
 	CUDA_CHECK_RETURN(cudaGetLastError());

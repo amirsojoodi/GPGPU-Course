@@ -14,6 +14,8 @@
 
 #define OPERATION_I(X) (X)/1319+(X)*((X)-13)
 
+#define STREAM_NUMBERS 4 
+
 #define RANDOM_NUMBER_MAX 1000
 
 //Macro for checking cuda errors following a cuda launch or api call
