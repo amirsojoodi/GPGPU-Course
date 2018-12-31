@@ -1,6 +1,49 @@
 #include"blur.h"
 
-__global__ void blur_kernel_shared_memory_revised(int *img_out, int *img_in, int height, int width, int pad){
+__global__ void blur_kernel_shared_memory_revised_II(int *img_out, int *img_in, int height, int width, int pad){
+
+        int tid_x = threadIdx.x + blockIdx.x * blockDim.x;
+        int tid_y = threadIdx.y + blockIdx.y * blockDim.y;
+
+        extern __shared__ int img_in_s[]; // size = (blockDim.y + 2) * (blockDim.x + 2)
+
+        img_in_s[(threadIdx.y+1)*(blockDim.x+pad)+(threadIdx.x+1)] =
+                img_in[(tid_y+1) * (width+2) + tid_x];
+        img_in_s[(threadIdx.y+1)*(blockDim.x+pad)+(threadIdx.x+1)] +=
+                img_in[(tid_y+1) * (width+2) + tid_x+1];
+        img_in_s[(threadIdx.y+1)*(blockDim.x+pad)+(threadIdx.x+1)] +=
+                img_in[(tid_y+1) * (width+2) + tid_x+2];
+
+        if(threadIdx.y == blockDim.y - 1){ // Last row
+                img_in_s[(threadIdx.y+2)*(blockDim.x+pad)+(threadIdx.x+1)] =
+                        img_in[(tid_y+2) * (width+2) + tid_x];
+                img_in_s[(threadIdx.y+2)*(blockDim.x+pad)+(threadIdx.x+1)] +=
+                        img_in[(tid_y+2) * (width+2) + tid_x+1];
+                img_in_s[(threadIdx.y+2)*(blockDim.x+pad)+(threadIdx.x+1)] +=
+                        img_in[(tid_y+2) * (width+2) + tid_x+2];
+        }
+
+        if(threadIdx.y == 0){ // First row
+                img_in_s[(threadIdx.y)*(blockDim.x+pad)+(threadIdx.x+1)] =
+                        img_in[(tid_y) * (width+2) + tid_x];
+                img_in_s[(threadIdx.y)*(blockDim.x+pad)+(threadIdx.x+1)] +=
+                        img_in[(tid_y) * (width+2) + tid_x+1];
+                img_in_s[(threadIdx.y)*(blockDim.x+pad)+(threadIdx.x+1)] +=
+                        img_in[(tid_y) * (width+2) + tid_x+2];
+        }
+
+        __syncthreads();
+
+		int sum = 0;
+        sum += img_in_s[(threadIdx.y) * (blockDim.x+pad) + threadIdx.x+1];
+        sum += img_in_s[(threadIdx.y+1) * (blockDim.x+pad) + threadIdx.x+1];
+        sum += img_in_s[(threadIdx.y+2) * (blockDim.x+pad) + threadIdx.x+1];
+        sum /= 9;
+
+        img_out[tid_y * width + tid_x] = sum;
+}
+
+__global__ void blur_kernel_shared_memory_revised_I(int *img_out, int *img_in, int height, int width, int pad){
 	
 	int tid_x = threadIdx.x + blockIdx.x * blockDim.x;
 	int tid_y = threadIdx.y + blockIdx.y * blockDim.y;
@@ -88,7 +131,6 @@ void sequential_blur(int *img_out, int *img_in, int height, int width){
 			img_out[i * width + j] = sum / 9;
 		}
 	}
-
 	return;
 }
 
@@ -177,7 +219,7 @@ int main(int argc, char *argv[]){
 		
 		int stream_y = IMAGE_SIZE_Y / stream_count;
 
-		blur_kernel_shared_memory_revised<<< grid_dime, block_dime, shared_memory_size, streams[i % STREAM_NUMBERS]>>>(&output_d[offset], &input_d[copy_offset], stream_y, IMAGE_SIZE_X, pad);
+		blur_kernel_shared_memory_revised_II<<< grid_dime, block_dime, shared_memory_size, streams[i % STREAM_NUMBERS]>>>(&output_d[offset], &input_d[copy_offset], stream_y, IMAGE_SIZE_X, pad);
 
 		cudaMemcpyAsync(&device_output_h[offset], &output_d[offset], stream_bytes_d_to_h, cudaMemcpyDeviceToHost, streams[i % STREAM_NUMBERS]);
 	}
