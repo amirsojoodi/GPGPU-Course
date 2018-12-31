@@ -10,4 +10,4 @@ blur_optimized: $(sources) Makefile blur.h
 	nvcc -o blur_optimized $(sources) $(nvcc_options)-O3
 
 clean:
-	rm blur blur
+	rm blur blur_optimized
