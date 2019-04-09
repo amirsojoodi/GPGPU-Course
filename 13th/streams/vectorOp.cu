@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
 	initialize_data_zero(&output_h, data_size);
 	//initialize_data_zero(&device_output_h, data_size);
 	initialize_data_zero_cudaMallocHost(&device_output_h, data_size);
-	
+
 	// Initialize data on Device
 	CUDA_CHECK_RETURN(cudaMalloc((void **)&data_d, sizeof(int)*data_size));
 	CUDA_CHECK_RETURN(cudaMalloc((void **)&output_d, sizeof(int)*data_size));
@@ -79,11 +79,17 @@ int main(int argc, char *argv[]){
 
 	for(int i = 0; i < stream_count; i++){
 		
-		cudaMemcpyAsync(&data_d[offset], &data_h[offset], stream_bytes, cudaMemcpyHostToDevice, streams[i % STREAM_NUMBERS]);
-		
-		vector_operation_kernel<<< grid_dime, block_dime, 0, streams[i % STREAM_NUMBERS]>>>(&output_d[offset], &data_d[offset], stream_size);
-
-		cudaMemcpyAsync(&device_output_h[offset], &output_d[offset], stream_bytes, cudaMemcpyDeviceToHost, streams[i % STREAM_NUMBERS]);
+		cudaMemcpyAsync(&data_d[offset], &data_h[offset], stream_bytes, cudaMemcpyHostToDevice, streams[i]);
+		offset += stream_size;
+	}		
+	offset = 0;
+	for(int i = 0; i < stream_count; i++){
+		vector_operation_kernel<<< grid_dime, block_dime, 0, streams[i]>>>(&output_d[offset], &data_d[offset], stream_size);
+		offset += stream_size;
+	}
+	offset = 0;
+	for(int i = 0; i < stream_count; i++){
+		cudaMemcpyAsync(&device_output_h[offset], &output_d[offset], stream_bytes, cudaMemcpyDeviceToHost, streams[i]);
 		offset += stream_size;
 	}
 
@@ -101,6 +107,7 @@ int main(int argc, char *argv[]){
 	for (int i = 0; i < STREAM_NUMBERS; i++){
         cudaStreamDestroy(streams[i]);
     }
+
 	//free(data_h);
 	CUDA_CHECK_RETURN(cudaFreeHost(data_h));
 	free(output_h);

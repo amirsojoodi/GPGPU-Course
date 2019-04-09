@@ -1,4 +1,4 @@
-nvcc_options= -gencode arch=compute_30,code=sm_30 -lm -D TEST --compiler-options -Wall 
+nvcc_options= -gencode arch=compute_30,code=sm_30 -lm -D TEST --compiler-options -Wall --default-stream per-thread 
 sources = vectorOp.cu
 
 all: vectorOp vectorOp_optimized
