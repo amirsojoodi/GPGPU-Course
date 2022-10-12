@@ -1,10 +1,10 @@
-all: histogram histogramOptimized
+all: histogram.o histogramOptimized.o
 
-histogram: histogram.c histogram.h
-	gcc -std=c99 histogram.c -o histogram -lpthread -D TEST
+histogram.o: histogram.c histogram.h
+	gcc -std=c99 histogram.c -o histogram.o -lpthread -D TEST
 
-histogramOptimized: histogram.c histogram.h
-	gcc -std=c99 histogram.c -o histogramOptimized -lpthread -O3 
+histogramOptimized.o: histogram.c histogram.h
+	gcc -std=c99 histogram.c -o histogramOptimized.o -lpthread -O3 
 
 clean:
-	rm histogram histogramOptimized
+	rm *.o

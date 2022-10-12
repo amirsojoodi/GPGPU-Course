@@ -1,13 +1,13 @@
-all: vectorAdd vectorAddProfiled
+all: vectorAdd.o vectorAddProfiled.o
 
-vectorAdd: vectorAdd.c 
-	gcc -std=c99 vectorAdd.c -o vectorAdd -lpthread -lm
+vectorAdd.o: vectorAdd.c 
+	gcc -std=c99 vectorAdd.c -o vectorAdd.o -lpthread -lm
 
-vectorAddProfiled: vectorAdd.c 
-	gcc -std=c99 vectorAdd.c -o vectorAddProfiled -lpthread -lm -pg
+vectorAddProfiled.o: vectorAdd.c 
+	gcc -std=c99 vectorAdd.c -o vectorAddProfiled.o -lpthread -lm -g -pg
 
-analysis: vectorAddProfiled gmon.out
-	gprof -b vectorAddProfiled gmon.out > analysis.out
+analysis: vectorAddProfiled.o gmon.out
+	gprof -b vectorAddProfiled.o gmon.out > analysis.out
 
 clean:
-	rm vectorAdd vectorAddProfiled gmon.out analysis.out
+	rm vectorAdd.o vectorAddProfiled.o gmon.out analysis.out

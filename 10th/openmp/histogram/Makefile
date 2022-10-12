@@ -1,13 +1,13 @@
 options = -lpthread -D TEST -std=c99 -Wall -fopenmp
 sources = histogram.c histogram.h helper-functions.c histogram-serial.c histogram-parallel-3.c histogram-openmp.c
 
-all: histogram histogramOptimized
+all: histogram.o histogramOptimized.o
 
-histogram: $(sources)
-	gcc $(sources) -o histogram $(options)
+histogram.o: $(sources)
+	gcc $(sources) -o histogram.o $(options)
 
-histogramOptimized: $(sources)
-	gcc $(sources) -o histogramOptimized $(options) -O3
+histogramOptimized.o: $(sources)
+	gcc $(sources) -o histogramOptimized.o $(options) -O3
 
 clean:
-	rm histogram histogramOptimized
+	rm *.o

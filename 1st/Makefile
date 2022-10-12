@@ -1,5 +1,5 @@
-vectorAdd: vectorAdd.c
-	gcc vectorAdd.c -o vectorAdd -Wall -std=c99
+vectorAdd.o: vectorAdd.c
+	gcc vectorAdd.c -o vectorAdd.o -Wall -std=c99
 
 clean:
-	rm vectorAdd 
+	rm *.o

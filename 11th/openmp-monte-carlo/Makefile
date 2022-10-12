@@ -1,13 +1,13 @@
 options = -D TEST -std=gnu99 -Wall -fopenmp
 sources = pi.c pi.h helper-functions.c
 
-all: pi pi_optimized
+all: pi.o pi_optimized.o
 
-pi: $(sources)
-	gcc $(sources) -o pi $(options)
+pi.o: $(sources)
+	gcc $(sources) -o pi.o $(options)
 
-pi_optimized: $(sources)
-	gcc $(sources) -o pi_optimized $(options) -O3
+pi_optimized.o: $(sources)
+	gcc $(sources) -o pi_optimized.o $(options) -O3
 
 clean:
-	rm pi pi_optimized
+	rm *.o

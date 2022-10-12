@@ -1,10 +1,10 @@
-all: vectorAdd vectorAddOptimized 
+all: vectorAdd.o vectorAddOptimized.o 
 
-vectorAdd: vectorAdd.c 
-	gcc -std=c99 vectorAdd.c -o vectorAdd -lpthread -lm
+vectorAdd.o: vectorAdd.c 
+	gcc -std=c99 vectorAdd.c -o vectorAdd.o -lpthread -lm
 
-vectorAddOptimized: vectorAdd.c 
-	gcc -std=c99 vectorAdd.c -o vectorAddOptimized -O3 -lpthread -lm
+vectorAddOptimized.o: vectorAdd.c 
+	gcc -std=c99 vectorAdd.c -o vectorAddOptimized.o -O3 -lpthread -lm
 
 clean:
-	rm vectorAdd vectorAddOptimized
+	rm *.o

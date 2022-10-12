@@ -1,13 +1,13 @@
 options = -D TEST -std=c99 -Wall -fopenmp
 sources = pi.c pi.h helper-functions.c
 
-all: pi piOptimized
+all: pi.o piOptimized.o
 
-pi: $(sources)
-	gcc $(sources) -o pi $(options)
+pi.o: $(sources)
+	gcc $(sources) -o pi.o $(options)
 
-piOptimized: $(sources)
-	gcc $(sources) -o piOptimized $(options) -O3
+piOptimized.o: $(sources)
+	gcc $(sources) -o piOptimized.o $(options) -O3
 
 clean:
-	rm pi piOptimized
+	rm *.o

@@ -1,11 +1,11 @@
-all: vectorAdd vectorAddDebug
+all: vectorAdd.o vectorAddDebug.o
 
-vectorAdd: vectorAdd.c 
-	gcc -std=c99 vectorAdd.c -o vectorAdd -lpthread -lm
+vectorAdd.o: vectorAdd.c 
+	gcc -std=c99 vectorAdd.c -o vectorAdd.o -lpthread -lm
 
-vectorAddDebug: vectorAdd.c 
-	gcc -g -std=c99 vectorAdd.c -o vectorAddDebug -lpthread -lm
-	echo "Use 'gdb vectorAddDebug' to debug"
+vectorAddDebug.o: vectorAdd.c 
+	gcc -g -std=c99 vectorAdd.c -o vectorAddDebug.o -lpthread -lm
+	echo "Use 'gdb vectorAddDebug.o' to debug"
 
 clean:
-	rm vectorAdd vectorAddDebug
+	rm *.o

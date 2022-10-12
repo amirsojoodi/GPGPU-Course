@@ -1,10 +1,10 @@
-all: vectorReduce vectorReduceOptimized 
+all: vectorReduce.o vectorReduceOptimized.o
 
-vectorReduce: vectorReduce.c vectorReduce.h
-	gcc -std=c99 vectorReduce.c -o vectorReduce -lpthread -D TEST
+vectorReduce.o: vectorReduce.c vectorReduce.h
+	gcc -std=c99 vectorReduce.c -o vectorReduce.o -lpthread -D TEST
 
-vectorReduceOptimized: vectorReduce.c vectorReduce.h
-	gcc -std=c99 vectorReduce.c -o vectorReduceOptimized -O3 -lpthread -D TEST
+vectorReduceOptimized.o: vectorReduce.c vectorReduce.h
+	gcc -std=c99 vectorReduce.c -o vectorReduceOptimized.o -O3 -lpthread -D TEST
 
 clean:
-	rm vectorReduce vectorReduceOptimized
+	rm *.o

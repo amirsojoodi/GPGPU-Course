@@ -12,14 +12,14 @@ LDFLAGS  = -lpthread -lm `pkg-config --libs OpenCL`
 
 all: default
 
-default: vectorOp vectorOp_optimized
+default: vectorOp.o vectorOp_optimized.o
 
-vectorOp: $(CXXSRC) $(CXXHEAD) Makefile
-	$(CXX) -o vectorOp $(CXXSRC) $(CXXFLAGS) $(LDFLAGS)
+vectorOp.o: $(CXXSRC) $(CXXHEAD) Makefile
+	$(CXX) -o vectorOp.o $(CXXSRC) $(CXXFLAGS) $(LDFLAGS)
 
-vectorOp_optimized: $(CXXSRC) $(CXXHEAD) Makefile
-	$(CXX) -o vectorOp_optimized $(CXXSRC) $(OPT) $(CXXFLAGS) $(LDFLAGS)
+vectorOp_optimized.o: $(CXXSRC) $(CXXHEAD) Makefile
+	$(CXX) -o vectorOp_optimized.o $(CXXSRC) $(OPT) $(CXXFLAGS) $(LDFLAGS)
 
 clean:
-	$(RM) vectorOp vectorOp_optimized
+	$(RM) *.o
 

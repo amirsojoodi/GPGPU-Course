@@ -12,13 +12,13 @@ LDFLAGS  = -lpthread -lm `pkg-config --libs OpenCL`
 
 all: default
 
-default: multiCq multiCq_optimized
+default: multiCq.o multiCq_optimized.o
 
 multiCq: $(CXXSRC) $(CXXHEAD) Makefile
-	$(CXX) -o multiCq $(CXXSRC) $(CXXFLAGS) $(LDFLAGS)
+	$(CXX) -o multiCq.o $(CXXSRC) $(CXXFLAGS) $(LDFLAGS)
 
 multiCq_optimized: $(CXXSRC) $(CXXHEAD) Makefile
-	$(CXX) -o multiCq_optimized $(CXXSRC) $(OPT) $(CXXFLAGS) $(LDFLAGS)
+	$(CXX) -o multiCq_optimized.o $(CXXSRC) $(OPT) $(CXXFLAGS) $(LDFLAGS)
 
 clean:
-	$(RM) multiCq multiCq_optimized
+	$(RM) *.o
