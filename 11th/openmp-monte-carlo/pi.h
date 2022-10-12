@@ -1,3 +1,6 @@
+#ifndef _PI_H
+#define _PI_H
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -14,3 +17,5 @@ void validate(double *a, double *b, int length);
 void initialize_data_random(double **data, int data_size);
 
 void initialize_data_zero(double **data, int data_size);
+
+#endif

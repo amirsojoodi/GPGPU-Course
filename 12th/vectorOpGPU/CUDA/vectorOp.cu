@@ -9,7 +9,7 @@ __global__ void vector_operation_kernel_coalesced(int *output, int *data, int si
 
   for (; tid < size; tid += total)
   {
-    output[tid] = OPERATION(data[tid]);
+    output[tid] = OPERATION_I(data[tid]);
   }
 }
 
@@ -26,7 +26,7 @@ __global__ void vector_operation_kernel(int *output, int *data, int size, int wo
 
   for (tid = si; tid < ei; tid++)
   {
-    output[tid] = OPERATION(data[tid]);
+    output[tid] = OPERATION_I(data[tid]);
   }
 }
 
@@ -35,7 +35,7 @@ void sequential_vector_operation(int *output, int *data, int size)
 
   for (int i = 0; i < size; i++)
   {
-    output[i] = OPERATION(data[i]);
+    output[i] = OPERATION_I(data[i]);
   }
   return;
 }

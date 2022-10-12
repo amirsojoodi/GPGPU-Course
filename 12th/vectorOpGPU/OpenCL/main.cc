@@ -1,17 +1,18 @@
 #include "main.hxx"
 
-constexpr bool USE_NAIVE {false};
+constexpr bool USE_NAIVE{false};
 
-int main(int argc, char *argv[]) 
-{
+int main(int argc, char *argv[]) {
   using namespace std;
 
   ios_base::sync_with_stdio(false);
 
   if (argc != 5) {
-    cerr << R"(Correct way to execute this program is:
-./vectorOp platform_number data_size workgroup_size work_per_workitem
-For example:\n./vectorOp 0 10000 512 4 )" << endl;
+    cerr << "Correct way to execute this program is:" << endl
+         << "./vectorOp platform_number data_size workgroup_size "
+            "work_per_workitem"
+         << endl
+         << "For example:\n./vectorOp 0 10000 512 4 " << endl;
     return 1;
   }
 
@@ -30,8 +31,7 @@ For example:\n./vectorOp 0 10000 512 4 )" << endl;
 
   /// Serial Execution
   auto ts_serial = chrono::high_resolution_clock::now();
-  transform(h_data.begin(), h_data.end(), h_output.begin(),
-            OPERATION_I);
+  transform(h_data.begin(), h_data.end(), h_output.begin(), OPERATION_I);
   auto tf_serial = chrono::high_resolution_clock::now();
 
   // Initialize OpenCL
@@ -56,10 +56,10 @@ For example:\n./vectorOp 0 10000 512 4 )" << endl;
       cl::Program(context, ReadTextFile("./kernel.cl"), CL_FALSE);
   try {
     program.build(BUILD_FLAGS.c_str());
-  } catch (const cl::Error& e) {
+  } catch (const cl::Error &e) {
     if (e.err() == CL_BUILD_PROGRAM_FAILURE) {
       cerr << "[ERROR] Building program Failed, log:\n";
-      auto name     = device.getInfo<CL_DEVICE_NAME>();
+      auto name = device.getInfo<CL_DEVICE_NAME>();
       auto buildLog = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(device);
       cerr << "Build log for " << name << ":\n" << buildLog << endl;
       return 2;
@@ -70,14 +70,14 @@ For example:\n./vectorOp 0 10000 512 4 )" << endl;
   // Select kernel implementation
   auto kernel = cl::Kernel(
       program,
-      ((const char *[]){"op", "op_coalesced"})[1 - USE_NAIVE]); // c11: compound literal
+      ((const char *[]){
+          "op", "op_coalesced"})[1 - USE_NAIVE]); // c11: compound literal
 
   // Set the kernel arguments
   kernel.setArg(0, buf_src);
   kernel.setArg(1, buf_trgt);
   kernel.setArg(2, work_per_workitem); // useless for op_coalesced kernel
   kernel.setArg(3, n_elem);
-
 
   // Set lunch args
   cl::NDRange global(n_elem / work_per_workitem);
@@ -87,16 +87,15 @@ For example:\n./vectorOp 0 10000 512 4 )" << endl;
 
   /// Enqueue kernel for execution
   auto ts_ocl = chrono::high_resolution_clock::now();
-  queue.enqueueWriteBuffer(
-      buf_src, CL_TRUE, 0, h_data.size() * sizeof(h_data[0]), h_data.data());
+  queue.enqueueWriteBuffer(buf_src, CL_TRUE, 0,
+                           h_data.size() * sizeof(h_data[0]), h_data.data());
   queue.enqueueNDRangeKernel(kernel, cl::NullRange, global, local);
   queue.enqueueReadBuffer(buf_trgt, CL_TRUE, 0,
-                                 d_output.size() * sizeof(d_output[0]),
-                                 d_output.data());
+                          d_output.size() * sizeof(d_output[0]),
+                          d_output.data());
   queue.finish();
   auto tf_ocl = chrono::high_resolution_clock::now();
 
-  
   cout << "Serial time:\t"
        << chrono::duration<double, milli>(tf_serial - ts_serial).count() * 10
        << "ms"
@@ -105,8 +104,7 @@ For example:\n./vectorOp 0 10000 512 4 )" << endl;
        << '\n';
 
 #ifdef TEST
-  auto location = mismatch(h_output.begin(), h_output.end(),
-                           d_output.begin());
+  auto location = mismatch(h_output.begin(), h_output.end(), d_output.begin());
   if (location.first == h_output.end())
     cout << "[PASS] No mismatch found! " << endl;
   else

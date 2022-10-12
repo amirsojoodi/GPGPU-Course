@@ -1,81 +1,83 @@
-#ifndef _HISTOGRAM_H
-#define _HISTOGRAM_H
-#include"histogram.h"
-#endif
+#include "histogram.h"
 
 pthread_mutex_t *locks;
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
 
-	double elapsed_time;
-	int *data, *serial_hist, *parallel_hist;
-	pthread_t *threads;
-	argument *arguments;
-	
-	if(argc != 4){
-		printf("Correct way to execute this program is:\n");
-		printf("./histogram arraySize histogramSize numberOfThreads\n");
-		return 1;
-	}
+  double elapsed_time;
+  int *data, *serial_hist, *parallel_hist;
+  pthread_t *threads;
+  argument *arguments;
 
-	int data_size = atoi(argv[1]);
-	int hist_size = atoi(argv[2]);
-	int num_thread = atoi(argv[3]);
-	
-	initialize_data_random(&data, data_size);
-	initialize_data_zero(&serial_hist, hist_size);
+  if (argc != 4) {
+    printf("Correct way to execute this program is:\n");
+    printf("./histogram arraySize histogramSize numberOfThreads\n");
+    return 1;
+  }
 
-	initialize_data_zero(&parallel_hist, hist_size);
-	initialize_threads(&threads, num_thread);
-	initialize_arguments(&arguments, num_thread);
-	initialize_locks(&locks, hist_size);
+  int data_size = atoi(argv[1]);
+  int hist_size = atoi(argv[2]);
+  int num_thread = atoi(argv[3]);
 
-	// Sequential histogram
-	set_clock();
+  initialize_data_random(&data, data_size);
+  initialize_data_zero(&serial_hist, hist_size);
 
-    sequential_naive_histogram(data, serial_hist, data_size, hist_size);
+  initialize_data_zero(&parallel_hist, hist_size);
+  initialize_threads(&threads, num_thread);
+  initialize_arguments(&arguments, num_thread);
+  initialize_locks(&locks, hist_size);
 
-    elapsed_time = get_elapsed_time();
+  // Sequential histogram
+  set_clock();
 
-	printf("Naive Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
+  sequential_naive_histogram(data, serial_hist, data_size, hist_size);
 
-	// Third Parallel histogram
-	memset(parallel_hist, 0, hist_size * sizeof(int));
+  elapsed_time = get_elapsed_time();
 
-	set_clock();
-    
-	third_parallel_histogram(data, parallel_hist, threads, arguments, data_size, hist_size, num_thread);
+  printf("Naive Histogram time calculation duration: %.4fms\n",
+         elapsed_time / 1000);
 
-    elapsed_time = get_elapsed_time();
+  // Third Parallel histogram
+  memset(parallel_hist, 0, hist_size * sizeof(int));
 
-    printf("-> 3rd Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
+  set_clock();
 
-    #ifdef  TEST
-    validate(serial_hist, parallel_hist, hist_size);
-    #endif
+  third_parallel_histogram(data, parallel_hist, threads, arguments, data_size,
+                           hist_size, num_thread);
 
-	// Openmp parallel histogram
-	memset(parallel_hist, 0, hist_size * sizeof(int));
+  elapsed_time = get_elapsed_time();
 
-	set_clock();
-    
-	openmp_histogram(data, parallel_hist, data_size, hist_size, num_thread);
+  printf("-> Pthread 3rd version Parallel Histogram time calculation duration: "
+         "%.4fms\n",
+         elapsed_time / 1000);
 
-    elapsed_time = get_elapsed_time();
+#ifdef TEST
+  validate(serial_hist, parallel_hist, hist_size);
+#endif
 
-    printf("-> Openmp Parallel Histogram time calculation duration: %.4fms\n", elapsed_time / 1000);
+  // Openmp parallel histogram
+  memset(parallel_hist, 0, hist_size * sizeof(int));
 
-    #ifdef  TEST
-    validate(serial_hist, parallel_hist, hist_size);
-    #endif
+  set_clock();
 
-	destroy_locks(locks, hist_size);
+  openmp_histogram(data, parallel_hist, data_size, hist_size, num_thread);
 
-	free(data);
-	free(serial_hist);
-	free(parallel_hist);
-	free(threads);
-	free(arguments);
+  elapsed_time = get_elapsed_time();
 
-	return 0;
+  printf("-> Openmp Parallel Histogram time calculation duration: %.4fms\n",
+         elapsed_time / 1000);
+
+#ifdef TEST
+  validate(serial_hist, parallel_hist, hist_size);
+#endif
+
+  destroy_locks(locks, hist_size);
+
+  free(data);
+  free(serial_hist);
+  free(parallel_hist);
+  free(threads);
+  free(arguments);
+
+  return 0;
 }

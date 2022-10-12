@@ -19,9 +19,9 @@
 #include <string>
 #include <vector>
 
-constexpr int RANDOM_MAX {1000};
-std::string OCL2_BUILD_FLAGS {"-cl-std=CL2.0"};
-std::string BUILD_FLAGS_BASE {"-cl-mad-enable  -cl-fast-relaxed-math"};
+constexpr int RANDOM_MAX{1000};
+std::string OCL2_BUILD_FLAGS{"-cl-std=CL2.0"};
+std::string BUILD_FLAGS_BASE{"-cl-mad-enable  -cl-fast-relaxed-math"};
 #ifdef OPENCL_2
 std::string BUILD_FLAGS{
     std::move(OCL2_BUILD_FLAGS.append(" ").append(BUILD_FLAGS_BASE))};
@@ -36,8 +36,7 @@ constexpr auto OPERATION_I = [](auto X) {
   return X / (X + 1010) + X / 1319 + X * (X - 13);
 };
 
-static inline auto ReadTextFile(const char *s)
-{
+static inline auto ReadTextFile(const char *s) {
   std::ifstream mfile(s);
   std::string content((std::istreambuf_iterator<char>(mfile)),
                       (std::istreambuf_iterator<char>()));
@@ -45,8 +44,7 @@ static inline auto ReadTextFile(const char *s)
   return content;
 }
 
-static inline auto RandGen()
-{
+static inline auto RandGen() {
   std::random_device rd;
   std::mt19937 mt(rd());
   return mt;

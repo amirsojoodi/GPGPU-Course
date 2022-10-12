@@ -6,6 +6,8 @@
 
 #define min(a,b) ((a) < (b) ? a : b)
 
+#define TEST 1
+
 typedef struct argument{
 	int *a;
 	int *b;
