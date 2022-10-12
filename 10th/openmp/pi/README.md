@@ -1,3 +1,3 @@
-## Second Session: Loop unrolling and play with Cache
+# Session 10: PI Calculation with OpenMP
 
 You can build executable files with `make` command, and delete them with `make clean`.

@@ -1,3 +1,3 @@
-## Second Session: Loop unrolling and play with Cache
+## Fourth Session: Pthreads
 
 You can build executable files with `make` command, and delete them with `make clean`.

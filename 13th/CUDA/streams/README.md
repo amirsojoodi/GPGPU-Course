@@ -1,3 +1,3 @@
-## Second Session: Loop unrolling and play with Cache
+# Session 13: Utilizing streams in CUDA
 
 You can build executable files with `make` command, and delete them with `make clean`.
